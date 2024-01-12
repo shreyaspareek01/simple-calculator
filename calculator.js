@@ -1,15 +1,15 @@
 function add(a, b) {
-  return parseInt(a) + parseInt(b);
+  return parseFloat(a) + parseFloat(b);
 }
 function subtract(a, b) {
-  return parseInt(a) - parseInt(b);
+  return parseFloat(a) - parseFloat(b);
 }
 function multiply(a, b) {
-  return parseInt(a) * parseInt(b);
+  return parseFloat(a) * parseFloat(b);
 }
 
 function divide(a, b) {
-  return parseInt(a) / parseInt(b);
+  return parseFloat(a) / parseFloat(b);
 }
 
 let firstNumber;
@@ -18,6 +18,7 @@ let finalOperator = "";
 let secondNumber;
 let tempNumber;
 let finalResult = "";
+const upperOutput = document.querySelector(".upperOutput");
 
 function operate(operator, num1, num2) {
   if (operator == "+") {
@@ -60,51 +61,57 @@ const clear = document.querySelector(".clear1");
 clear.addEventListener("click", () => {
   answer.textContent = "";
   displayValue = "";
+  operation = "";
+  upperOutput.textContent = "";
   firstNumber = null;
 });
 
-const backspace = document.querySelector(".delete");
-backspace.addEventListener("click", () => {
-  let temp = displayValue.split("");
-  let temp1 = temp.slice(0, -1);
-  let temp2;
-  displayValue = temp1.join("");
-  answer.textContent = displayValue;
-  console.log(temp);
-  console.log(temp.length);
-  for (let i = 0; i < temp.length; i++) {
-    if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
-      temp2 = 1;
-      break;
-    } else {
-      temp2 = 0;
-    }
-  }
-  if (temp2 == "0") {
-    operation = "";
-  }
-});
-// let temp3;
-// let temp4 = "";
-// let temp5 = "";
-// const equalsTo = document.querySelector(".equalsTo");
-// equalsTo.addEventListener("click", () => {
+// const backspace = document.querySelector(".delete");
+// backspace.addEventListener("click", () => {
 //   let temp = displayValue.split("");
+//   let temp1 = temp.slice(0, -1);
+//   let temp2;
+//   displayValue = temp1.join("");
+//   answer.textContent = displayValue;
+//   console.log(temp);
+//   console.log(temp.length);
 //   for (let i = 0; i < temp.length; i++) {
 //     if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
-//       temp3 = i;
+//       temp2 = 1;
+//       break;
+//     } else {
+//       temp2 = 0;
 //     }
 //   }
-//   for (let i = 0; i < temp3; i++) {
-//     temp4 += parseInt(temp[i]);
+//   if (temp2 == "0") {
+//     operation = "";
 //   }
-//   for (let i = temp3 + 1; i < temp.length; i++) {
-//     temp5 += parseInt(temp[i]);
-//   }
-//   firstNumber = temp4;
-//   secondNumber = temp5;
-//   finalOperator = temp[temp3];
-
-//   operate(finalOperator, firstNumber, secondNumber);
-//   answer.textContent = finalResult;
 // });
+let temp3;
+let temp4 = "";
+let temp5 = "";
+const equalsTo = document.querySelector(".equalsTo");
+equalsTo.addEventListener("click", () => {
+  let temp = displayValue.split("");
+  for (let i = 0; i < temp.length; i++) {
+    if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
+      temp3 = i;
+    }
+  }
+  for (let i = 0; i < temp3; i++) {
+    temp4 += parseFloat(temp[i]);
+  }
+  for (let i = temp3 + 1; i < temp.length; i++) {
+    temp5 += parseFloat(temp[i]);
+  }
+  firstNumber = parseFloat(temp.slice(0, temp3).join(""));
+  secondNumber = parseFloat(temp.slice(temp3 + 1).join(""));
+  finalOperator = temp[temp3];
+
+  operate(finalOperator, firstNumber, secondNumber);
+  answer.textContent = parseFloat(finalResult);
+
+  upperOutput.textContent = displayValue;
+  displayValue = parseFloat(finalResult);
+  operation = "";
+});
