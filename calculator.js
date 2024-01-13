@@ -20,6 +20,7 @@ let tempNumber;
 let finalResult = "";
 const upperOutput = document.querySelector(".upperOutput");
 let displayValue = "";
+let decimalCount = 0;
 
 function operate(operator, num1, num2) {
   if (operator == "+") {
@@ -46,10 +47,20 @@ numbers.forEach((number) => {
   });
 });
 
+const decimal = document.querySelector(".decimal");
+decimal.addEventListener("click", () => {
+  if (decimalCount == 0) {
+    displayValue += ".";
+    answer.textContent = displayValue;
+    decimalCount = 1;
+  }
+});
+
 const operators = document.querySelectorAll(".operators");
 operators.forEach((o) => {
   o.addEventListener("click", () => {
     if (answer.textContent != "") {
+      decimalCount = 0;
       if (operation == "") {
         displayValue += o.textContent;
         operation = o.textContent;
@@ -66,6 +77,7 @@ operators.forEach((o) => {
           answer.textContent += o.textContent;
           displayValue = answer.textContent;
           operation = o.textContent;
+          decimalCount = 0;
         }
       }
     }
@@ -78,6 +90,7 @@ clear.addEventListener("click", () => {
   displayValue = "";
   operation = "";
   upperOutput.textContent = "";
+  decimalCount = 0;
 });
 
 const backspace = document.querySelector(".delete");
@@ -91,6 +104,14 @@ backspace.addEventListener("click", () => {
     if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
       temp2 = 1;
       break;
+    }
+  }
+  for (let i = 0; i < temp1.length; i++) {
+    if (temp1[i] == ".") {
+      decimalCount = 1;
+      break;
+    } else {
+      decimalCount = 0;
     }
   }
   if (temp2 != 0) {
@@ -131,4 +152,10 @@ function updateResult() {
     .replace(/\.?0+$/, "");
 
   operation = "";
+
+  for (let i = 0; i < answer.textContent.split("").length; i++) {
+    if (answer.textContent.split("")[i] == ".") {
+      decimalCount = 1;
+    }
+  }
 }
