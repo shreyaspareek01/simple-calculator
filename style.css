@@ -82,6 +82,8 @@ h1 {
   font-size: 2em;
   height: 50%;
   margin: 0 20px;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 footer {

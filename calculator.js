@@ -12,13 +12,14 @@ function divide(a, b) {
   return parseFloat(a) / parseFloat(b);
 }
 
-let firstNumber;
+let firstNumber = "0";
 let operation = "";
 let finalOperator = "";
-let secondNumber;
+let secondNumber = "0";
 let tempNumber;
 let finalResult = "";
 const upperOutput = document.querySelector(".upperOutput");
+let displayValue = "";
 
 function operate(operator, num1, num2) {
   if (operator == "+") {
@@ -34,25 +35,39 @@ function operate(operator, num1, num2) {
   }
 }
 const answer = document.querySelector(".answer");
-let displayValue = "";
+answer.style["font-size"] = "4em";
+
 const numbers = document.querySelectorAll(".numbers");
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
     displayValue += number.textContent;
     answer.textContent = displayValue;
-    tempNumber = answer.textContent;
+    let tempAns = answer.split("");
   });
 });
 
 const operators = document.querySelectorAll(".operators");
 operators.forEach((o) => {
   o.addEventListener("click", () => {
-    if (operation == "") {
-      displayValue += o.textContent;
-      operation = o.textContent;
-      answer.textContent = displayValue;
-      firstNumber = tempNumber;
-      tempNumber = answer.textContent;
+    if (answer.textContent != "") {
+      if (operation == "") {
+        displayValue += o.textContent;
+        operation = o.textContent;
+        answer.textContent = displayValue;
+      } else {
+        let tempAns = answer.textContent.split("");
+        if (
+          tempAns[tempAns.length - 1] != "/" &&
+          tempAns[tempAns.length - 1] != "x" &&
+          tempAns[tempAns.length - 1] != "-" &&
+          tempAns[tempAns.length - 1] != "+"
+        ) {
+          updateResult();
+          answer.textContent += o.textContent;
+          displayValue = answer.textContent;
+          operation = o.textContent;
+        }
+      }
     }
   });
 });
@@ -63,35 +78,32 @@ clear.addEventListener("click", () => {
   displayValue = "";
   operation = "";
   upperOutput.textContent = "";
-  firstNumber = null;
 });
 
-// const backspace = document.querySelector(".delete");
-// backspace.addEventListener("click", () => {
-//   let temp = displayValue.split("");
-//   let temp1 = temp.slice(0, -1);
-//   let temp2;
-//   displayValue = temp1.join("");
-//   answer.textContent = displayValue;
-//   console.log(temp);
-//   console.log(temp.length);
-//   for (let i = 0; i < temp.length; i++) {
-//     if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
-//       temp2 = 1;
-//       break;
-//     } else {
-//       temp2 = 0;
-//     }
-//   }
-//   if (temp2 == "0") {
-//     operation = "";
-//   }
-// });
+const backspace = document.querySelector(".delete");
+backspace.addEventListener("click", () => {
+  let temp = answer.textContent.split("");
+  let temp1 = temp.slice(0, -1);
+  let temp2 = 0;
+  displayValue = temp1.join("");
+  answer.textContent = displayValue;
+  for (let i = 0; i < temp.length; i++) {
+    if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
+      temp2 = 1;
+      break;
+    }
+  }
+  if (temp2 != 0) {
+    operation = "";
+  }
+});
 let temp3;
 let temp4 = "";
 let temp5 = "";
 const equalsTo = document.querySelector(".equalsTo");
-equalsTo.addEventListener("click", () => {
+equalsTo.addEventListener("click", updateResult);
+
+function updateResult() {
   let temp = displayValue.split("");
   for (let i = 0; i < temp.length; i++) {
     if (temp[i] == "/" || temp[i] == "x" || temp[i] == "-" || temp[i] == "+") {
@@ -109,9 +121,14 @@ equalsTo.addEventListener("click", () => {
   finalOperator = temp[temp3];
 
   operate(finalOperator, firstNumber, secondNumber);
-  answer.textContent = parseFloat(finalResult);
+  answer.textContent = parseFloat(finalResult)
+    .toFixed(4)
+    .replace(/\.?0+$/, "");
 
   upperOutput.textContent = displayValue;
-  displayValue = parseFloat(finalResult);
+  displayValue = answer.textContent = parseFloat(finalResult)
+    .toFixed(4)
+    .replace(/\.?0+$/, "");
+
   operation = "";
-});
+}
